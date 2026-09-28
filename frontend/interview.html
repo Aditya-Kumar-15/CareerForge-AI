@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Technical Interview - CareerForge AI</title>
+  <meta name="description" content="Engage in your active, real-time AI technical assessment.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .interview-card {
+      max-width: 800px;
+      margin: 1.5rem auto;
+      padding: 3rem;
+    }
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 1rem;
+    }
+    .meta-badges {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .timer-badge {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+    .timer-warn {
+      color: var(--accent-danger);
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.2);
+      animation: pulse 1s infinite alternate;
+    }
+    .question-box {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+      color: var(--text-primary);
+      min-height: 80px;
+    }
+    .answer-textarea {
+      min-height: 180px;
+      resize: vertical;
+      font-family: inherit;
+      line-height: 1.5;
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+    .integrity-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .integrity-warn-badge {
+      padding: 0.2rem 0.6rem;
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--accent-danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 4px;
+    }
+    /* Voice Interface */
+    .voice-control-panel {
+      display: none;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-light);
+      padding: 1.25rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .pulse-record-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      border: none;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+      position: relative;
+    }
+    .pulse-record-btn.recording {
+      background: var(--accent-danger);
+    }
+    .pulse-record-btn.recording::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 4px solid var(--accent-danger);
+      animation: ripple 1.2s infinite ease-in-out;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      box-sizing: border-box;
+    }
+    @keyframes ripple {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+    @keyframes pulse {
+      0% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+    .voice-status-text {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    * {
+      overflow-anchor: none !important;
+    }
+    .question-nav-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+    }
+    .question-nav-btn:hover {
+      background: rgba(99, 102, 241, 0.1);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+    .question-nav-btn.active {
+      background: var(--accent-primary);
+      border-color: var(--accent-primary);
+      color: white;
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+    }
+    .question-nav-btn.answered {
+      border-color: var(--accent-success);
+      background: rgba(16, 185, 129, 0.08);
+      color: var(--accent-success);
+    }
+    .question-nav-btn.answered.active {
+      background: var(--accent-success);
+      color: white;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+    }
+    .mcq-option-card {
+      background: rgba(10, 10, 15, 0.6);
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      padding: 1.1rem 1.4rem;
+      color: var(--text-primary);
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      user-select: none;
+    }
+    .mcq-option-card:hover {
+      border-color: var(--accent-primary);
+      background: rgba(99, 102, 241, 0.1);
+      transform: translateX(4px);
+    }
+    .mcq-option-card.selected {
+      border-color: var(--accent-primary);
+      background: rgba(99, 102, 241, 0.25);
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+    }
+    .mcq-option-key {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--accent-primary);
+    }
+    .mcq-option-card.selected .mcq-option-key {
+      background: var(--accent-primary);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="avatar" id="navAvatar">U</div>
+        <span class="sidebar-logo">CareerForge AI</span>
+      </div>
+      
+      <ul class="sidebar-menu">
+        <li>
+          <a href="dashboard.html" class="sidebar-link">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
+            </svg>
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="resume.html" class="sidebar-link">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Resume Parser
+          </a>
+        </li>
+        <li>
+          <a href="#" class="sidebar-link active">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            AI Interview
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="integrity-indicator" style="margin-bottom: 1.5rem; justify-content: center;">
+          <span>Integrity Status:</span>
+          <span class="integrity-warn-badge" id="sidebarWarnings">Warnings: 0/3</span>
+        </div>
+        <button id="logoutBtn" class="btn btn-secondary">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="margin-right: 8px; vertical-align: middle;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="page-header">
+        <div class="page-title">
+          <h2>Active AI Technical Interview</h2>
+          <p id="interviewMeta">Loading interview session details...</p>
+        </div>
+        <div style="display: flex; gap: 0.75rem; align-items: center;">
+          <button id="fullscreenBtn" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem; width: auto;">
+            Fullscreen Mode
+          </button>
+        </div>
+      </header>
+
+      <!-- Alert Banner -->
+      <div id="alertBanner" class="alert-banner"></div>
+
+      <!-- Interview Workspace -->
+      <section class="glass-card interview-card" id="workspaceCard">
+        <div class="question-header">
+          <div>
+            <span id="questionCounter" style="font-family: 'Outfit'; font-weight: 700; font-size: 1.25rem;">Question 0 / 10</span>
+            <div class="meta-badges" style="margin-top: 0.5rem;">
+              <span class="badge badge-student" id="badgeCategory">General</span>
+              <span class="badge" id="badgeDifficulty" style="background: rgba(99, 102, 241, 0.1); border: 1px solid var(--accent-primary);">Medium</span>
+            </div>
+          </div>
+          
+          <!-- Dual Timer Clocks (Total Assessment Timer) -->
+          <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+            <!-- Total Assessment Timer -->
+            <div class="timer-badge" id="overallTimerBadge" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: #10b981;" title="Overall Exam Time Remaining">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Total: <strong id="overallTimeRemaining">10:00</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question Navigation Grid -->
+        <div class="question-nav-container" style="margin: 1.25rem 0; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); padding: 1rem 0;">
+          <label class="form-label" style="margin-bottom: 0.75rem; font-size: 0.85rem; color: var(--text-muted);">Navigate Questions</label>
+          <div id="questionNav" style="display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
+        </div>
+
+        <!-- AI Question Text -->
+        <div class="question-box" id="questionText">
+          Loading question text...
+        </div>
+
+        <!-- Objective MCQ Options Area -->
+        <div class="form-group" style="margin-top: 1.5rem;">
+          <label class="form-label" style="margin-bottom: 1rem; font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">Select Your Choice</label>
+          <div id="mcqOptionsContainer" style="display: flex; flex-direction: column; gap: 0.85rem;"></div>
+        </div>
+
+        <!-- Submit Buttons -->
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" id="prevBtn" style="padding: 1rem; font-size: 1.1rem; flex: 1; display: none;">
+            Previous Question
+          </button>
+          <button type="button" class="btn btn-primary" id="submitBtn" style="padding: 1rem; font-size: 1.1rem; flex: 2;">
+            Submit Response & Next Question
+          </button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Fullscreen Required Overlay -->
+  <div id="fullscreenOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 18, 0.96); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 2rem; box-sizing: border-box;">
+    <h2 style="font-family: 'Outfit', sans-serif; color: var(--accent-danger); margin-bottom: 1rem; font-size: 2.2rem; font-weight: 700;">Fullscreen Mode Required</h2>
+    <p style="color: var(--text-secondary); max-width: 500px; margin-bottom: 1.5rem; line-height: 1.6; font-size: 1.1rem;">
+      This assessment requires fullscreen mode to track window integrity. Please click the button below to restore fullscreen and resume your interview.
+    </p>
+    <div id="overlayWarningNotice" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid var(--accent-danger); color: #f87171; padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 600; margin-bottom: 1.5rem; max-width: 500px;"></div>
+    <button id="restoreFullscreenBtn" class="btn btn-primary" style="width: auto; padding: 1rem 2rem; font-size: 1.1rem; font-weight: 600; cursor: pointer;">Enter Fullscreen & Resume</button>
+  </div>
+
+
+
+  <!-- Terminated Overlay -->
+  <div id="terminationOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 18, 0.98); z-index: 10000; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 2rem; box-sizing: border-box;">
+    <h2 style="font-family: 'Outfit', sans-serif; color: var(--accent-danger); margin-bottom: 1rem; font-size: 2.2rem; font-weight: 700;">Assessment Terminated</h2>
+    <p style="color: var(--text-secondary); max-width: 500px; margin-bottom: 2rem; line-height: 1.6; font-size: 1.1rem;">
+      Security violation detected: You have exited the active area, switched windows, or left fullscreen too many times (3/3 warnings). This session has been blocked.
+    </p>
+    <button id="restartExamBtn" class="btn btn-primary" style="width: auto; padding: 1rem 2rem; font-size: 1.1rem; font-weight: 600; background: var(--accent-danger); border-color: var(--accent-danger); cursor: pointer;">Restart Assessment</button>
+  </div>
+
+  <script src="js/auth.js?v=25"></script>
+  <script src="js/interview.js?v=25"></script>
+</body>
+</html>

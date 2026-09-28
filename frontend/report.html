@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assessment Report - CareerForge AI</title>
+  <meta name="description" content="Review your comprehensive AI interview performance, skill gaps, and custom suggestions.">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Chart.js CDN for interactive graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .report-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .score-circle-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem;
+      text-align: center;
+    }
+    .score-gauge {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(closest-side, var(--bg-card) 79%, transparent 80% 100%),
+                  conic-gradient(var(--accent-primary) 0%, var(--accent-secondary) 0%, var(--border-light) 0%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 2.25rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
+      border: 1px solid var(--border-light);
+    }
+    .accordion-item {
+      background: rgba(10, 10, 15, 0.3);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: var(--transition-smooth);
+    }
+    .accordion-item:hover {
+      border-color: rgba(99, 102, 241, 0.25);
+    }
+    .accordion-header {
+      padding: 1.25rem 1.5rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.01);
+    }
+    .accordion-content {
+      display: none;
+      padding: 1.5rem;
+      border-top: 1px solid var(--border-light);
+      background: rgba(10, 10, 15, 0.5);
+    }
+    .sub-scores-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .sub-score-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-light);
+      padding: 0.75rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .sub-score-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+    }
+    .sub-score-lbl {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.25rem;
+    }
+    .status-strong {
+      color: var(--accent-success);
+      font-weight: 600;
+    }
+    .status-average {
+      color: #f59e0b; /* Amber */
+      font-weight: 600;
+    }
+    .status-weak {
+      color: var(--accent-danger);
+      font-weight: 600;
+    }
+    .chart-container {
+      position: relative;
+      height: 320px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="avatar" id="navAvatar">U</div>
+        <span class="sidebar-logo">CareerForge AI</span>
+      </div>
+      
+      <ul class="sidebar-menu">
+        <li>
+          <a href="dashboard.html" class="sidebar-link">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
+            </svg>
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="resume.html" class="sidebar-link">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Resume Parser
+          </a>
+        </li>
+        <li>
+          <a href="interview-setup.html" class="sidebar-link">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            AI Interview
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button id="logoutBtn" class="btn btn-secondary">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="margin-right: 8px; vertical-align: middle;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="page-header">
+        <div class="page-title">
+          <h2>AI Interview Report</h2>
+          <p id="reportHeaderMeta">Detailed breakdown of scores, skill gaps, and recommendations.</p>
+        </div>
+        <div class="user-profile-badge">
+          <div class="avatar" id="badgeAvatar">S</div>
+          <span id="badgeName">User</span>
+          <span class="badge badge-student">Student</span>
+        </div>
+      </header>
+
+      <!-- Alert Banner -->
+      <div id="alertBanner" class="alert-banner"></div>
+
+      <!-- Alert Banner -->
+      <div id="alertBanner" class="alert-banner"></div>
+
+      <!-- 1. OVERALL PERFORMANCE SUMMARY SECTION -->
+      <section class="report-grid" style="margin-bottom: 2rem;">
+        <!-- Overall Score & Summary Numbers -->
+        <div class="glass-card score-circle-container">
+          <h3 style="margin-bottom: 1rem; color: var(--text-primary);">Overall Performance</h3>
+          <div class="score-gauge" id="scoreGauge">0%</div>
+          <p style="font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem;" id="scoreLabel">Analyzing Performance</p>
+          <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4; margin-bottom: 1rem;" id="integrityWarningsText">
+            All integrity checks passed.
+          </p>
+
+          <div class="summary-stats-grid" style="width: 100%;">
+            <div class="stat-card">
+              <div class="stat-val" id="statTotal">0</div>
+              <div class="stat-lbl">Total Questions</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" style="color: var(--accent-success);" id="statCorrect">0</div>
+              <div class="stat-lbl">Correct</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" style="color: var(--accent-danger);" id="statWrong">0</div>
+              <div class="stat-lbl">Wrong</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Chart & Difficulty Breakdown -->
+        <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <h3 style="color: var(--accent-primary); margin: 0;">Category Competency</h3>
+              <span style="font-size: 0.75rem; color: var(--text-secondary);">Calculated from actual answers</span>
+            </div>
+            <div class="chart-container" style="height: 180px;">
+              <canvas id="categoryChart"></canvas>
+            </div>
+            <div id="categoryBreakdownContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 0.5rem; margin-top: 1rem; border-top: 1px solid var(--border-light); padding-top: 0.75rem;">
+              <!-- Dynamic Category Breakdown Pills -->
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid var(--border-light); padding-top: 1rem; margin-top: 1rem;">
+            <h4 style="font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+              Difficulty Performance Breakdown
+            </h4>
+            <div class="diff-badge-grid" id="difficultyBreakdownContainer">
+              <div class="diff-pill"><span class="diff-name">Easy:</span> <span class="diff-val">0/0</span></div>
+              <div class="diff-pill"><span class="diff-name">Medium:</span> <span class="diff-val">0/0</span></div>
+              <div class="diff-pill"><span class="diff-name">Hard:</span> <span class="diff-val">0/0</span></div>
+              <div class="diff-pill"><span class="diff-name">Expert:</span> <span class="diff-val">0/0</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. CONCEPTS YOU NEED TO IMPROVE & STRONG CONCEPTS SECTION -->
+      <section class="profile-grid" style="margin-bottom: 2.5rem;">
+        <!-- Concepts User Needs to Improve (Grouped) -->
+        <div class="glass-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="color: var(--accent-danger); margin: 0;">Concepts You Need to Improve</h3>
+            <span class="badge-qs" id="weakConceptsCount">0 Concepts</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">
+            Grouped weak concepts from incorrect question responses.
+          </p>
+          <div id="weakConceptsContainer" style="display: flex; flex-direction: column; gap: 1rem;">
+            <p style="color: var(--text-secondary); text-align: center; padding: 1.5rem;">Analyzing weak concepts...</p>
+          </div>
+        </div>
+
+        <!-- Strong Concepts -->
+        <div class="glass-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="color: var(--accent-success); margin: 0;">Strong Concepts</h3>
+            <span class="badge-qs-strong" id="strongConceptsCount">0 Concepts</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">
+            Concepts where you answered correctly and demonstrated solid understanding.
+          </p>
+          <div id="strongConceptsContainer" style="display: flex; flex-direction: column; gap: 1rem;">
+            <p style="color: var(--text-secondary); text-align: center; padding: 1.5rem;">Analyzing strong concepts...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. LEARNING & RECOMMENDED PRACTICE SECTION -->
+      <section class="glass-card" style="margin-bottom: 2.5rem;">
+        <h3 style="margin-bottom: 0.5rem; color: var(--accent-secondary);">Recommended Practice</h3>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem;">
+          Actionable practice steps tailored strictly to your identified weak concepts.
+        </p>
+        <div id="recommendedPracticeContainer" style="display: flex; flex-direction: column; gap: 1rem;">
+          <p style="color: var(--text-secondary); text-align: center; padding: 1rem;">Generating recommendations...</p>
+        </div>
+      </section>
+
+      <!-- 4. DETAILED QUESTION-BY-QUESTION ANALYSIS SECTION -->
+      <section class="glass-card" style="margin-bottom: 3rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
+          <h3 style="color: var(--text-primary); margin: 0;">Detailed Question Analysis</h3>
+          
+          <!-- Filter Tabs -->
+          <div class="report-tabs">
+            <button class="report-tab-btn active" onclick="filterQuestionReport('all')">All Questions</button>
+            <button class="report-tab-btn" onclick="filterQuestionReport('correct')">✓ Correct</button>
+            <button class="report-tab-btn" onclick="filterQuestionReport('wrong')">✗ Wrong</button>
+          </div>
+        </div>
+
+        <div id="questionAuditContainer">
+          <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">Loading detailed question audit...</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/auth.js?v=25"></script>
+  <script src="js/report.js?v=25"></script>
+</body>
+</html>

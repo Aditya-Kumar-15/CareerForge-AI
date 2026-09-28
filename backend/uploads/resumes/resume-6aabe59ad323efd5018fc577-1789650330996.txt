@@ -1,0 +1,9 @@
+
+Candidate Two
+IT Student at NIT Trichy
+Technical Skills: Java, Spring Boot, PostgreSQL, AWS, Microservices, Docker
+Projects:
+1. E-Commerce Inventory Warehouse Management
+Description: Distributed Java Spring Boot microservice application managing multi-node warehouse stock using PostgreSQL and Redis caching.
+Role: Backend Architect
+      

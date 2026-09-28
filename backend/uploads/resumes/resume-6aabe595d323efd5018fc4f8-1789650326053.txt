@@ -1,0 +1,11 @@
+
+Candidate One
+Computer Science Student at IIT Madras
+Technical Skills: Python, Flask, MongoDB, React, Machine Learning, Data Science
+Projects:
+1. Fake News Detection
+Description: Built a machine learning system with Python, Flask, and React to classify fake news articles. Uses MongoDB for storing training data and logs.
+Role: Lead Developer
+Certifications: AWS Machine Learning Specialty
+Experience: Software Intern at Tech Solutions (Python, Flask, SQL)
+      

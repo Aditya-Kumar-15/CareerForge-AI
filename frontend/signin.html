@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareerForge AI - Sign In</title>
+  <meta name="description" content="Sign in to your premium CareerForge AI account.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="glass-card auth-card">
+      <div class="auth-header">
+        <h1>CareerForge AI</h1>
+        <p>Sign in to access your student profile & settings</p>
+      </div>
+
+      <div id="alertBanner" class="alert-banner"></div>
+
+      <form id="loginForm" autocomplete="off">
+        <div class="form-group">
+          <label for="identifier" class="form-label">Email or Roll Number</label>
+          <input type="text" id="identifier" name="identifier" autocomplete="off" class="form-input" placeholder="john@college.edu or 20XXAA1234" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" id="password" name="password" autocomplete="new-password" class="form-input" placeholder="••••••••" required>
+        </div>
+
+        <div style="text-align: right; margin-top: -0.5rem; margin-bottom: 1.25rem;">
+          <a href="#" id="forgotPasswordLink" style="font-size: 0.85rem; color: var(--accent-primary); text-decoration: none; font-weight: 500;">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="signinBtn">Sign In</button>
+      </form>
+
+      <div class="form-footer">
+        New student? <a href="signup.html">Create an account</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js?v=25"></script>
+  <script src="js/signin.js?v=25"></script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Registration - CareerForge AI</title>
+  <meta name="description" content="Register a new account on CareerForge AI.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="glass-card auth-card">
+      <div class="auth-header">
+        <h1>Create Account</h1>
+        <p>Join CareerForge AI and track academic sessions</p>
+      </div>
+
+      <div id="alertBanner" class="alert-banner"></div>
+
+      <form id="signupForm" autocomplete="off">
+
+        <div class="form-group">
+          <label for="name" class="form-label">Full Name</label>
+          <input type="text" id="name" name="name" autocomplete="off" class="form-input" placeholder="John Doe" required>
+        </div>
+
+        <div class="form-group">
+          <label for="college" class="form-label">College/University</label>
+          <input type="text" id="college" name="college" autocomplete="off" class="form-input" placeholder="University of Technology" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="rollNo" class="form-label">Roll Number</label>
+            <input type="text" id="rollNo" name="rollNo" autocomplete="off" class="form-input" placeholder="20XXAA1234" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" id="email" name="email" autocomplete="off" class="form-input" placeholder="john@college.edu" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+
+          <!-- Department -->
+          <div class="form-group">
+            <label for="department" class="form-label">Department</label>
+
+            <select id="department" name="department" class="form-input" required>
+              <option value="" disabled selected>Select Department</option>
+
+              <option value="Computer Science Engineering">Computer Science Engineering (CSE)</option>
+              <option value="Artificial Intelligence & Machine Learning">Artificial Intelligence & Machine Learning (AIML)</option>
+              <option value="Artificial Intelligence & Data Science">Artificial Intelligence & Data Science (AIDS)</option>
+              <option value="Information Technology">Information Technology (IT)</option>
+              <option value="Computer Science & Cyber Security">Computer Science & Cyber Security (CS-CS)</option>
+              <option value="Computer Science & Business Systems">Computer Science & Business Systems (CSBS)</option>
+              <option value="Electronics & Communication Engineering">Electronics & Communication Engineering (ECE)</option>
+              <option value="Electrical & Electronics Engineering">Electrical & Electronics Engineering (EEE)</option>
+              <option value="Mechanical Engineering">Mechanical Engineering (ME)</option>
+              <option value="Civil Engineering">Civil Engineering (CE)</option>
+              <option value="Data Science">Data Science (DS)</option>
+              <option value="Cyber Security">Cyber Security (CS)</option>
+            </select>
+
+          </div>
+
+          <!-- Year -->
+          <div class="form-group">
+            <label for="year" class="form-label">Year of Study</label>
+
+            <select id="year" class="form-input" required>
+              <option value="" disabled selected>Select Year</option>
+              <option value="1">1st Year</option>
+              <option value="2">2nd Year</option>
+              <option value="3">3rd Year</option>
+              <option value="4">4th Year</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="form-group">
+          <label for="phone" class="form-label">Phone Number</label>
+          <input type="tel" id="phone" name="phone" autocomplete="off" class="form-input" placeholder="+91 9876543210" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" id="password" name="password" autocomplete="new-password" class="form-input" placeholder="••••••••" minlength="6" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="signupBtn">
+          Sign Up
+        </button>
+
+      </form>
+
+      <div class="form-footer">
+        Already registered?
+        <a href="signin.html">Sign In here</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/auth.js?v=25"></script>
+  <script src="js/signup.js?v=25"></script>
+
+</body>
+</html>
